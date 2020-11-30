@@ -1,5 +1,6 @@
 import csv
 import pandas as pd
+import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -178,4 +179,42 @@ def correlation(variable1,variable2, debut= None, fin= None):
                 plt.plot(duree,variable_duree2, color="red")
                 plt.legend(loc='upper left')
                 plt.show()
+          
+        
+  def anomalies(variable, debut= None, fin= None):            
+#detection anomalies
+     temps_seconde=[]
+    
+     for i in range (len(temps)):
+        temps_seconde.append(trseconde(str(temps[i])))
+     
+     d = temps.index(debut)
+     f = temps.index(fin)
+     duree = temps_seconde[d:f]
+     variable_duree = variable[d:f]
+                   
+     Seuil_haut= np.median(variable_duree) + 3*np.std(variable_duree)
+     Seuil_bas= np.median(variable_duree) - 3*np.std(variable_duree)
+    
+     L=variable_duree[d:f]
+     anomalies=[]
+     duree_anomalies=[]
+     
+     for i in range (len(L)):
+         if L[i]>Seuil_haut or L[i]<Seuil_bas:
+            anomalies.append(L[i])
+            duree_anomalies.append(duree[i])
+            
+     if not(anomalies):
+         print('Il ne semble pas y avoir de valeurs abberantes')
+     
+     plt.title('Evolution de la variable dans le temps')
+     plt.xlabel('Temps')
+     if variable!=humidex:
+         if debut==None or fin==None:
+              plt.plot(temps_seconde,variable)
+         else:
+              plt.plot(duree,variable_duree)
+              plt.scatter(duree_anomalies,anomalies,c="red",linewidth = 0.5)
+              plt.show()
 
