@@ -135,7 +135,17 @@ def displayStat(variable, debut= None, fin= None):
         index_med = variable.index(np.median(variable_duree))
 #point médiane
         plt.annotate("Médiane",xy=(duree[index_min],np.median(variable_duree)),xytext=(duree[index_med]+30000,np.median(variable_duree)),arrowprops=dict(facecolor='black', arrowstyle='->'))
+
+        print('Valeur moyenne :',np.mean(variable_duree), "\n")
         
+#affichage de la valeur écart-type de la variable
+
+        print('Valeur écart-type :',np.std(variable_duree), "\n")
+
+#affichage de la variance de la variable
+
+        print('Valeur variance :',np.var(variable_duree), "\n")    
+    
 
 def correlation(variable1,variable2, debut= None, fin= None):
 
