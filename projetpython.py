@@ -9,7 +9,7 @@ import math
 #fichierCSV = csv.reader(f)
 #print(fichierCSV)
 
-fichierCSV=pd.read_csv(r"C:\Users\ikram\Downloads\EIVP_KM.csv",sep=';')
+fichierCSV=pd.read_csv("EIVP_KM.csv",sep=';', index_col='ID', parse_dates=True)
 frame=pd.DataFrame(fichierCSV)
 columns=frame.columns #renvoie l'intitulé des colonnes avec : print(columns)
 print(fichierCSV)
@@ -99,6 +99,10 @@ def displayStat(variable, debut= None, fin= None):
     plt.xlabel('Temps')
     
     temps_seconde=[]
+    d = temps.index(debut)
+    f = temps.index(fin)
+    duree = temps_seconde[d:f]
+    variable_duree = variable[d:f]
     
     for i in range (len(temps)):
         temps_seconde.append(trseconde(str(temps[i])))
@@ -107,10 +111,6 @@ def displayStat(variable, debut= None, fin= None):
         if debut==None or fin==None:
             plt.plot(temps_seconde,variable)
         else:
-            d = temps.index(debut)
-            f = temps.index(fin)
-            duree = temps_seconde[d:f]
-            variable_duree = variable[d:f]
             plt.plot(duree,variable_duree)
            
 
@@ -128,7 +128,14 @@ def displayStat(variable, debut= None, fin= None):
         index_max = variable.index(max(variable_duree))
         plt.annotate("Maximum",xy=(duree[index_max],max(variable_duree)),xytext=(duree[index_max]+30000,max(variable_duree)),arrowprops=dict(facecolor='black', arrowstyle='->'))
 
+#affichage de la valeur médiane de la variable
 
+        print('Valeur médiane :',np.median(variable_duree), "\n")
+#index correspondant à la valeur médiane de la variable :
+        index_med = variable.index(np.median(variable_duree))
+#point médiane
+        plt.annotate("Médiane",xy=(duree[index_min],np.median(variable_duree)),xytext=(duree[index_med]+30000,np.median(variable_duree)),arrowprops=dict(facecolor='black', arrowstyle='->'))
+        
 
 def correlation(variable1,variable2, debut= None, fin= None):
 
@@ -161,6 +168,11 @@ def correlation(variable1,variable2, debut= None, fin= None):
     plt.xlabel('Temps')
     
     temps_seconde=[]
+    d = temps.index(debut)
+    f = temps.index(fin)
+    duree = temps_seconde[d:f]
+    variable_duree1 = variable1[d:f]
+    variable_duree2 = variable2[d:f]
     
     for i in range (len(temps)):
         temps_seconde.append(trseconde(str(temps[i])))
@@ -170,51 +182,49 @@ def correlation(variable1,variable2, debut= None, fin= None):
             plt.plot(temps_seconde,variable1)
             plt.plot(temps_seconde,variable2)
         else:
-                d = temps.index(debut)
-                f = temps.index(fin)
-                duree = temps_seconde[d:f]
-                variable_duree1 = variable1[d:f]
-                variable_duree2 = variable2[d:f]
                 plt.plot(duree,variable_duree1, color="blue")
                 plt.plot(duree,variable_duree2, color="red")
                 plt.legend(loc='upper left')
                 plt.show()
           
         
-  def anomalies(variable, debut= None, fin= None):            
+def anomalies(variable, debut= None, fin= None):            
 #detection anomalies
-     temps_seconde=[]
+
+    temps_seconde=[]
+    d = temps.index(debut)
+    f = temps.index(fin)
+    duree = temps_seconde[d:f]
+    variable_duree = variable[d:f]
     
-     for i in range (len(temps)):
+    for i in range (len(temps)):
         temps_seconde.append(trseconde(str(temps[i])))
-     
-     d = temps.index(debut)
-     f = temps.index(fin)
-     duree = temps_seconde[d:f]
-     variable_duree = variable[d:f]
-                   
-     Seuil_haut= np.median(variable_duree) + 3*np.std(variable_duree)
-     Seuil_bas= np.median(variable_duree) - 3*np.std(variable_duree)
     
-     L=variable_duree[d:f]
-     anomalies=[]
-     duree_anomalies=[]
-     
-     for i in range (len(L)):
+#seuils des valeurs abberantes             
+    Seuil_haut= np.median(variable_duree) + 3*np.std(variable_duree)
+    Seuil_bas= np.median(variable_duree) - 3*np.std(variable_duree)
+    
+    L=variable_duree[d:f]
+    anomalies=[]
+    duree_anomalies=[]
+
+#détection de ces valeurs     
+    for i in range (len(L)):
          if L[i]>Seuil_haut or L[i]<Seuil_bas:
             anomalies.append(L[i])
             duree_anomalies.append(duree[i])
             
-     if not(anomalies):
+    if not(anomalies):
          print('Il ne semble pas y avoir de valeurs abberantes')
      
-     plt.title('Evolution de la variable dans le temps')
-     plt.xlabel('Temps')
-     if variable!=humidex:
+    plt.title('Evolution de la variable dans le temps')
+    plt.xlabel('Temps')
+    if variable!=humidex:
          if debut==None or fin==None:
               plt.plot(temps_seconde,variable)
          else:
               plt.plot(duree,variable_duree)
+#affichage des anomalies
               plt.scatter(duree_anomalies,anomalies,c="red",linewidth = 0.5)
               plt.show()
 
