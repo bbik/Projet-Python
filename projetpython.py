@@ -58,7 +58,7 @@ def tri_fusion(L):
         n=len(L)
         L1=L[:n//2]
         L2=L[n//2:]
-        return fusion(tri_fusion(L1), tri_fusion(L2)
+        return fusion(tri_fusion(L1), tri_fusion(L2))
 
 
 def display(variable,debut=None,fin=None):
@@ -66,8 +66,8 @@ def display(variable,debut=None,fin=None):
     plt.xlabel('Temps')
     temps_seconde=[]
     for i in range (len(temps)):
-        temps_secondev.append(trseconde(str(temps[i])))
-    temps_seconde=tri_fusion(temps_secondev)
+        temps_seconde.append(trseconde(str(temps[i])))
+    temps_seconde=tri_fusion(temps_seconde)
     if variable!=humidex:
         if debut==None or fin==None:
             plt.plot(temps_seconde,variable)
