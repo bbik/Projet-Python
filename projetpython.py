@@ -42,13 +42,32 @@ def trseconde(a):
     reference=int(jour)-11
     resultat=reference*24*3600+heureseconde+minuteseconde+int(seconde)
     return(resultat)
+def fusion (L1,L2):
+    if L1==[]:
+        return L2
+    elif L2==[]:
+        return L1
+    elif L1[0]<L2[0]:
+        return [L1[0]]+fusion(L1[1:],L2)
+    else:
+        return [L2[0]]+fusion(L1,L2[1:])
+def tri_fusion(L):
+    if len(L)<=1:
+        return L
+    else:
+        n=len(L)
+        L1=L[:n//2]
+        L2=L[n//2:]
+        return fusion(tri_fusion(L1), tri_fusion(L2)
+
 
 def display(variable,debut=None,fin=None):
     plt.title('Evolution de la variable dans le temps')
     plt.xlabel('Temps')
     temps_seconde=[]
     for i in range (len(temps)):
-        temps_seconde.append(trseconde(str(temps[i])))
+        temps_secondev.append(trseconde(str(temps[i])))
+    temps_seconde=tri_fusion(temps_secondev)
     if variable!=humidex:
         if debut==None or fin==None:
             plt.plot(temps_seconde,variable)
