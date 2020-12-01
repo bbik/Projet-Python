@@ -67,7 +67,7 @@ def display(variable,debut=None,fin=None):
     temps_seconde=[]
     for i in range (len(temps)):
         temps_seconde.append(trseconde(str(temps[i])))
-    temps_seconde=tri_fusion(temps_seconde)
+    #temps_seconde=tri_fusion(temps_seconde) erreur ??
     if variable!=humidex:
         if debut==None or fin==None:
             plt.plot(temps_seconde,variable)
@@ -118,10 +118,6 @@ def displayStat(variable, debut= None, fin= None):
     plt.xlabel('Temps')
     
     temps_seconde=[]
-    d = temps.index(debut)
-    f = temps.index(fin)
-    duree = temps_seconde[d:f]
-    variable_duree = variable[d:f]
     
     for i in range (len(temps)):
         temps_seconde.append(trseconde(str(temps[i])))
@@ -130,6 +126,10 @@ def displayStat(variable, debut= None, fin= None):
         if debut==None or fin==None:
             plt.plot(temps_seconde,variable)
         else:
+            d = temps.index(debut)
+            f = temps.index(fin)
+            duree = temps_seconde[d:f]
+            variable_duree = variable[d:f]
             plt.plot(duree,variable_duree)
            
 
@@ -197,11 +197,6 @@ def correlation(variable1,variable2, debut= None, fin= None):
     plt.xlabel('Temps')
     
     temps_seconde=[]
-    d = temps.index(debut)
-    f = temps.index(fin)
-    duree = temps_seconde[d:f]
-    variable_duree1 = variable1[d:f]
-    variable_duree2 = variable2[d:f]
     
     for i in range (len(temps)):
         temps_seconde.append(trseconde(str(temps[i])))
@@ -211,9 +206,14 @@ def correlation(variable1,variable2, debut= None, fin= None):
             plt.plot(temps_seconde,variable1)
             plt.plot(temps_seconde,variable2)
         else:
+                d = temps.index(debut)
+                f = temps.index(fin)
+                duree = temps_seconde[d:f]
+                variable_duree1 = variable1[d:f]
+                variable_duree2 = variable2[d:f]
                 plt.plot(duree,variable_duree1, color="blue")
                 plt.plot(duree,variable_duree2, color="red")
-                plt.legend(loc='upper left')
+                plt.legend(['Indice de correlation =', ind_correlation], markerscale = 100, frameon = False, fontsize = 10)
                 plt.show()
           
         
@@ -221,17 +221,18 @@ def anomalies(variable, debut= None, fin= None):
 #detection anomalies
 
     temps_seconde=[]
+    for i in range (len(temps)):
+        temps_seconde.append(trseconde(str(temps[i])))
+    
     d = temps.index(debut)
     f = temps.index(fin)
     duree = temps_seconde[d:f]
     variable_duree = variable[d:f]
     
-    for i in range (len(temps)):
-        temps_seconde.append(trseconde(str(temps[i])))
     
 #seuils des valeurs abberantes             
-    Seuil_haut= np.median(variable_duree) + 3*np.std(variable_duree)
-    Seuil_bas= np.median(variable_duree) - 3*np.std(variable_duree)
+    Seuil_haut= np.median(variable_duree) + 2.5*np.std(variable_duree)
+    Seuil_bas= np.median(variable_duree) - 2.5*np.std(variable_duree)
     
     L=variable_duree[d:f]
     anomalies=[]
