@@ -9,7 +9,7 @@ import math
 #fichierCSV = csv.reader(f)
 #print(fichierCSV)
 
-fichierCSV=pd.read_csv("EIVP_KM.csv",sep=';', index_col='ID', parse_dates=True)
+fichierCSV=pd.read_csv("EIVP_KM.csv",sep=';', parse_dates=True)
 frame=pd.DataFrame(fichierCSV)
 columns=frame.columns #renvoie l'intitulé des colonnes avec : print(columns)
 print(fichierCSV)
